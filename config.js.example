@@ -1,8 +1,17 @@
 exports.config = function() {
-    return {
-        key:    'XXXXXXXXXXXXXXXXXXXX',
-        secret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-        bucket: 'foo',
-        port:   8080
-    };
-}
+  return process.env.NODE_ENV == 'production' ? {
+    aws: {
+      key: 'xxxxx',
+      secret: 'xxxxx',
+      bucket: 'xxxxx',
+      port: 80    						   
+    }
+  } : {
+    aws : {
+      key: 'xxxxx',
+      secret: 'xxxxx',
+      bucket: 'xxxxx',
+      port: 8080
+    }
+  };
+};
