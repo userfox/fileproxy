@@ -14,7 +14,6 @@ var s3 = knox.createClient({
 //var cache = config.memcache.options ? new Memcached(config.memcache.servers ,config.memcache.options) : new Memcached(config.memcache.servers);
 var server = http.createServer(function(req, res) {
   if (req.method == 'OPTIONS') {
-    //console.log('OPTIONS: returning 200');
     res.writeHead(200, {'Access-Control-Allow-Origin' : '*', 'Access-Control-Allow-Methods' : 'PUT', 'Access-Control-Allow-Headers' : 'Origin, X-File-Size, X-File-Name, Content-Type, Accept, X-File-Type', 'Access-Control-Max-Age': '1728000'});
     res.end();
   } else if (req.method == 'PUT') {    
@@ -27,14 +26,15 @@ var server = http.createServer(function(req, res) {
     });    
     req_to_s3.on('response', function(res_from_s3) {
       res_from_s3.headers['access-control-allow-origin'] = '*';
-      //console.log(util.inspect(res_from_s3.headers));
       res.writeHead(res_from_s3.statusCode, res_from_s3.headers);		   
       res_from_s3.on('data', function(chunk) {
 	res.write(chunk);
       });
       res_from_s3.on('end', function() {
-	res.end();		       
+	res.end();
+	console.log("Handled response for " + req.url + " and returned " + res_from_s3.statusCode);
       });
+      
     });
   }
 });
